@@ -99,11 +99,10 @@ Point bumper22;
 Point bumper23;
 Point bumper24;
 
-
-Point target1;
-Point target2;
-Point hole1;
-Point hole2;
+//Point target1;
+//Point target2;
+//Point hole1;
+//Point hole2;
 
 Point leftLFlipperState;
 Point leftRFlipperState;
@@ -199,7 +198,7 @@ void drawBumper(Point& p, float radius, Color& c) {
 	if (d <= 22)
 	{
 		// do this when there is a collision
-		
+
 		vx = -vx;
 		vy = -vy;
 	}
@@ -404,7 +403,7 @@ void display(void)
 	bumper20.x = 270;	bumper20.y = 200;
 	bumper21.x = 270;	bumper21.y = 300;
 	bumper22.x = 270;	bumper22.y = 400;
-	
+
 
 	/*target1.x = 110; target1.y = 435;
 	target2.x = 145; target2.y = 435;
@@ -539,13 +538,10 @@ void display(void)
 
 
 
-	
-	
-
-
-	// walls and ball
+	//ball
 	drawCircle(currentPosition, 8, grey); // ball
 
+	// walls
 	drawWallS(upperWall, 20, 400, black); // top wall
 	drawWallS(bottomWall, 20, 400, black); // bottom wall
 	drawWallS(leftWall1, 200, 5, black); // left wall1
@@ -648,10 +644,10 @@ void init()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0, 300, 0, 500, 0, 1);
-	initialPosition.x = 280;	initialPosition.y = 77;
+	initialPosition.x = 150;	initialPosition.y = 250;
 	currentPosition = initialPosition;
 
-	
+
 
 }
 
@@ -695,11 +691,11 @@ int main(int argc, char* argv[])
 	glutDisplayFunc(display);
 	//glutReshapeFunc(reshape);     // Register callback handler for window re-shape
 
-	//glutIdleFunc(idle);	
-	/*glutMouseFunc(mousePress);
+	glutIdleFunc(idle);
+	glutMouseFunc(mousePress);
 	glutMotionFunc(mouseDrag);
 	glutPassiveMotionFunc(mouseMovement);
-*/
+
 	init();
 	glutMainLoop();
 	return 0;
