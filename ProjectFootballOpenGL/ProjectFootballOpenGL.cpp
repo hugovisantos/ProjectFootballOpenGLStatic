@@ -12,22 +12,6 @@ using namespace std;
 int windowPosX = 50;      // Windowed mode's top-left corner x
 int windowPosY = 50;      // Windowed mode's top-left corner y
 
-//////////////////////////
-//
-//// Projection clipping area
-//GLdouble clipAreaXLeft, clipAreaXRight, clipAreaYBottom, clipAreaYTop;
-//
-//GLfloat ballRadius = 0.075f;   // Radius of the bouncing ball
-//GLfloat ballX = 0.0f;         // Ball's center (x, y) position
-//GLfloat ballY = 0.0f;
-//GLfloat ballXMax, ballXMin, ballYMax, ballYMin; // Ball's center (x, y) bounds
-//GLfloat xSpeed = 0.02f;      // Ball's speed in x and y directions
-//GLfloat ySpeed = 0.007f;
-//int refreshMillis = 30;      // Refresh period in milliseconds
-//
-//
-////////////////////////////
-
 /// window stuff
 int window; // main window id
 const int BALL_SIZE = 7;
@@ -100,7 +84,6 @@ Point bumper7;
 Point bumper8;
 Point bumper9;
 Point bumper10;
-
 Point bumper11;
 Point bumper12;
 Point bumper13;
@@ -111,6 +94,10 @@ Point bumper17;
 Point bumper18;
 Point bumper19;
 Point bumper20;
+Point bumper21;
+Point bumper22;
+Point bumper23;
+Point bumper24;
 
 
 Point target1;
@@ -137,16 +124,16 @@ float angle = 0.0;
 const float ANGLE_CHANGE = 45;
 
 // draw text
-void output(int x, int y, float r, float g, float b, const char* string)
-{
-	glColor3f(r, g, b);
-	glRasterPos2f(x, y);
-	int len, i;
-	len = (int)strlen(string);
-	for (i = 0; i < len; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
-	}
-}
+//void output(int x, int y, float r, float g, float b, const char* string)
+//{
+//	glColor3f(r, g, b);
+//	glRasterPos2f(x, y);
+//	int len, i;
+//	len = (int)strlen(string);
+//	for (i = 0; i < len; i++) {
+//		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
+//	}
+//}
 
 // draw the Pinball
 void drawCircle(Point& p, float radius, Color& c) {
@@ -164,14 +151,14 @@ void drawCircle(Point& p, float radius, Color& c) {
 	if ((p.y < 1 || p.x > 300 || p.y > 440) && ballCounter > 0)
 	{
 		ballCounter--;
-		p.x = 280;
-		p.y = 77;
+		p.x = 1300;
+		p.y = 500;
 		vx = -vx;
 		vy = -vy;
 	}
-	if (p.x > 262)
+	if (p.x > 1300)
 	{
-		if (p.y >= 420)
+		if (p.y >= 500)
 		{
 			vx = vy;
 			p.x -= vx;
@@ -227,45 +214,45 @@ void drawBumper(Point& p, float radius, Color& c) {
 }
 
 // draws a pitfall obstacle
-void drawHole(Point& p, float radius, Color& c) {
-	// Collision code
-	float d = sqrt((pow(p.x - currentPosition.x, 2)) + (pow(p.y - currentPosition.y, 2)));
-	if (d <= 22 && ballCounter > 0)
-	{
-		// do this when there is a collision 
-		ballCounter--;
-		cout << "Ball Counter: " << ballCounter << endl;
-		currentPosition.x = 280;
-		currentPosition.y = 77;
-		vx = -vx;
-		vy = -vy;
-	}
-
-	// draw circle
-	float delta_theta = 0.01;
-	glColor3f(c.r, c.g, c.b);
-	glBegin(GL_POLYGON);
-	for (float angle = 0; angle < 2 * PI; angle += delta_theta)
-		glVertex3f(radius * cos(angle) + p.x, radius * sin(angle) + p.y, 0);
-	glEnd();
-}
+//void drawHole(Point& p, float radius, Color& c) {
+//	// Collision code
+//	float d = sqrt((pow(p.x - currentPosition.x, 2)) + (pow(p.y - currentPosition.y, 2)));
+//	if (d <= 22 && ballCounter > 0)
+//	{
+//		// do this when there is a collision 
+//		ballCounter--;
+//		cout << "Ball Counter: " << ballCounter << endl;
+//		currentPosition.x = 280;
+//		currentPosition.y = 77;
+//		vx = -vx;
+//		vy = -vy;
+//	}
+//
+//	// draw circle
+//	float delta_theta = 0.01;
+//	glColor3f(c.r, c.g, c.b);
+//	glBegin(GL_POLYGON);
+//	for (float angle = 0; angle < 2 * PI; angle += delta_theta)
+//		glVertex3f(radius * cos(angle) + p.x, radius * sin(angle) + p.y, 0);
+//	glEnd();
+//}
 
 // draws a target obstacle
-void drawTarget(Point& p, float height, float width, Color& c) {
-	if (p.y < currentPosition.y + 7 && (currentPosition.x > p.x && currentPosition.x < p.x + 20))
-	{
-		//score += 1000;
-		vy = -vy;
-	}
-	glColor3f(c.r, c.g, c.b);
-	glBegin(GL_POLYGON);
-	glVertex3f(p.x, p.y, 0);
-	glVertex3f(p.x + width, p.y, 0);
-	glVertex3f(p.x + width, p.y + height, 0);
-	glVertex3f(p.x, p.y + height, 0);
-	glVertex3f(p.x, p.y, 0);
-	glEnd();
-}
+//void drawTarget(Point& p, float height, float width, Color& c) {
+//	if (p.y < currentPosition.y + 7 && (currentPosition.x > p.x && currentPosition.x < p.x + 20))
+//	{
+//		//score += 1000;
+//		vy = -vy;
+//	}
+//	glColor3f(c.r, c.g, c.b);
+//	glBegin(GL_POLYGON);
+//	glVertex3f(p.x, p.y, 0);
+//	glVertex3f(p.x + width, p.y, 0);
+//	glVertex3f(p.x + width, p.y + height, 0);
+//	glVertex3f(p.x, p.y + height, 0);
+//	glVertex3f(p.x, p.y, 0);
+//	glEnd();
+//}
 
 // draws a rectangle
 void drawRectangle(Point& p, float height, float width, Color& c) {
@@ -305,63 +292,63 @@ void drawWallS(Point& p, float height, float width, Color& c) {
 }
 
 // Inner Side Walls
-void drawWallSM(Point& p, float height, float width, Color& c) {
-	// handle collision
-	if ((p.x + 10 < currentPosition.x - 7 || p.x > currentPosition.x + 7) && currentPosition.y < 110)
-	{
-		// do this when there is collision with side of wall
-		vx = -vx;
-	}
-
-	// draw rectangle
-	glColor3f(c.r, c.g, c.b);
-	glBegin(GL_POLYGON);
-	glVertex3f(p.x, p.y, 0);
-	glVertex3f(p.x + width, p.y, 0);
-	glVertex3f(p.x + width, p.y + height, 0);
-	glVertex3f(p.x, p.y + height, 0);
-	glVertex3f(p.x, p.y, 0);
-	glEnd();
-}
+//void drawWallSM(Point& p, float height, float width, Color& c) {
+//	// handle collision
+//	if ((p.x + 10 < currentPosition.x - 7 || p.x > currentPosition.x + 7) && currentPosition.y < 110)
+//	{
+//		// do this when there is collision with side of wall
+//		vx = -vx;
+//	}
+//
+//	// draw rectangle
+//	glColor3f(c.r, c.g, c.b);
+//	glBegin(GL_POLYGON);
+//	glVertex3f(p.x, p.y, 0);
+//	glVertex3f(p.x + width, p.y, 0);
+//	glVertex3f(p.x + width, p.y + height, 0);
+//	glVertex3f(p.x, p.y + height, 0);
+//	glVertex3f(p.x, p.y, 0);
+//	glEnd();
+//}
 
 // Insert Side Wall
-void drawWallIS(Point& p, float height, float width, Color& c) {
-	// handle collision
-	if (p.x < currentPosition.x + 7 && p.y + 400 > currentPosition.y)
-	{
-		// collision with side of wall
-		vx = -vx;
-	}
-
-	// draw rectangle
-	glColor3f(c.r, c.g, c.b);
-	glBegin(GL_POLYGON);
-	glVertex3f(p.x, p.y, 0);
-	glVertex3f(p.x + width, p.y, 0);
-	glVertex3f(p.x + width, p.y + height, 0);
-	glVertex3f(p.x, p.y + height, 0);
-	glVertex3f(p.x, p.y, 0);
-	glEnd();
-}
+//void drawWallIS(Point& p, float height, float width, Color& c) {
+//	// handle collision
+//	if (p.x < currentPosition.x + 7 && p.y + 400 > currentPosition.y)
+//	{
+//		// collision with side of wall
+//		vx = -vx;
+//	}
+//
+//	// draw rectangle
+//	glColor3f(c.r, c.g, c.b);
+//	glBegin(GL_POLYGON);
+//	glVertex3f(p.x, p.y, 0);
+//	glVertex3f(p.x + width, p.y, 0);
+//	glVertex3f(p.x + width, p.y + height, 0);
+//	glVertex3f(p.x, p.y + height, 0);
+//	glVertex3f(p.x, p.y, 0);
+//	glEnd();
+//}
 
 // Top Wall
-void drawWallTB(Point& p, float height, float width, Color& c) {
-	// handle collision
-	if (p.y < currentPosition.y + 7)
-	{
-		vy = -vy;
-	}
-
-	// draw rectangle
-	glColor3f(c.r, c.g, c.b);
-	glBegin(GL_POLYGON);
-	glVertex3f(p.x, p.y, 0);
-	glVertex3f(p.x + width, p.y, 0);
-	glVertex3f(p.x + width, p.y + height, 0);
-	glVertex3f(p.x, p.y + height, 0);
-	glVertex3f(p.x, p.y, 0);
-	glEnd();
-}
+//void drawWallTB(Point& p, float height, float width, Color& c) {
+//	// handle collision
+//	if (p.y < currentPosition.y + 7)
+//	{
+//		vy = -vy;
+//	}
+//
+//	// draw rectangle
+//	glColor3f(c.r, c.g, c.b);
+//	glBegin(GL_POLYGON);
+//	glVertex3f(p.x, p.y, 0);
+//	glVertex3f(p.x + width, p.y, 0);
+//	glVertex3f(p.x + width, p.y + height, 0);
+//	glVertex3f(p.x, p.y + height, 0);
+//	glVertex3f(p.x, p.y, 0);
+//	glEnd();
+//}
 
 // Flipper
 //void drawFlipper(Point& p, float segmentWidth, float segmentHeight, Color& c) {
@@ -387,39 +374,37 @@ void display(void)
 	rightFlipper.x = 0; rightFlipper.y = 0;*/
 
 	// walls
-	upperWall.x = 0;		upperWall.y = 0;
+	upperWall.x = 0;		upperWall.y = 460;
 	bottomWall.x = 0;		bottomWall.y = 0;
 	leftWall1.x = 0;		leftWall1.y = 0;
 	leftWall2.x = 0;		leftWall2.y = 300;
-	rightWall1.x = 300;		rightWall1.y = 0;
-	rightWall2.x = 250;		rightWall2.y = 300;
+	rightWall1.x = 295;		rightWall1.y = 0;
+	rightWall2.x = 295;		rightWall2.y = 300;
 
 	// obstacles
-	bumper1.x = 30;  bumper1.y = 100;
-	bumper2.x = 30;  bumper2.y = 200;
-	bumper3.x = 30;  bumper3.y = 300;
-	bumper4.x = 30;  bumper4.y = 400;
-
-	bumper5.x = 80; bumper5.y = 100;
-	bumper6.x = 80; bumper6.y = 200;
-	bumper7.x = 80; bumper7.y = 300;
-	bumper8.x = 80; bumper8.y = 400;
-
-	bumper9.x = 120; bumper9.y = 200;
-	bumper10.x = 120;bumper10.y = 300;
-
-	bumper11.x = 180;  bumper11.y = 200;
-	bumper12.x = 180;  bumper12.y = 300;
-
-	bumper13.x = 220;  bumper13.y = 100;
-	bumper14.x = 220;  bumper14.y = 200;
-	bumper15.x = 220; bumper15.y = 300;
-	bumper16.x = 220; bumper16.y = 400;
-
-	bumper17.x = 270; bumper17.y = 100;
-	bumper18.x = 270; bumper18.y = 200;
-	bumper19.x = 270; bumper19.y = 300;
-	bumper20.x = 270; bumper20.y = 400;
+	bumper1.x = 30;		bumper1.y = 100;
+	bumper2.x = 30;		bumper2.y = 200;
+	bumper3.x = 30;		bumper3.y = 300;
+	bumper4.x = 30;		bumper4.y = 400;
+	bumper5.x = 80;		bumper5.y = 40;
+	bumper6.x = 80;		bumper6.y = 140;
+	bumper7.x = 80;		bumper7.y = 240;
+	bumper8.x = 80;		bumper8.y = 340;
+	bumper9.x = 80;		bumper9.y = 440;
+	bumper10.x = 120;	bumper10.y = 200;
+	bumper11.x = 120;	bumper11.y = 300;
+	bumper12.x = 180;	bumper12.y = 200;
+	bumper13.x = 180;	bumper13.y = 300;
+	bumper14.x = 220;	bumper14.y = 40;
+	bumper15.x = 220;	bumper15.y = 140;
+	bumper16.x = 220;	bumper16.y = 240;
+	bumper17.x = 220;	bumper17.y = 340;
+	bumper18.x = 220;	bumper18.y = 440;
+	bumper19.x = 270;	bumper19.y = 100;
+	bumper20.x = 270;	bumper20.y = 200;
+	bumper21.x = 270;	bumper21.y = 300;
+	bumper22.x = 270;	bumper22.y = 400;
+	
 
 	/*target1.x = 110; target1.y = 435;
 	target2.x = 145; target2.y = 435;
@@ -537,7 +522,6 @@ void display(void)
 	drawBumper(bumper8, 6, gold); // bumper8
 	drawBumper(bumper9, 6, gold); // bumper9
 	drawBumper(bumper10, 6, gold); // bumper10
-
 	drawBumper(bumper11, 6, gold); // bumper11
 	drawBumper(bumper12, 6, gold); // bumper12
 	drawBumper(bumper13, 6, gold); // bumper13
@@ -548,13 +532,22 @@ void display(void)
 	drawBumper(bumper18, 6, gold); // bumper18
 	drawBumper(bumper19, 6, gold); // bumper19
 	drawBumper(bumper20, 6, gold); // bumper20
+	drawBumper(bumper21, 6, gold); // bumper21
+	drawBumper(bumper22, 6, gold); // bumper22
+	drawBumper(bumper23, 6, gold); // bumper23
+	drawBumper(bumper24, 6, gold); // bumper24
+
+
+
+	
+	
 
 
 	// walls and ball
-	drawCircle(currentPosition, 5, grey); // the pinball
+	drawCircle(currentPosition, 8, grey); // ball
 
-	drawWallTB(upperWall, 200, 5, gold); // top wall
-	drawWallS(bottomWall, 10, 300, black); // bottom wall
+	drawWallS(upperWall, 20, 400, black); // top wall
+	drawWallS(bottomWall, 20, 400, black); // bottom wall
 	drawWallS(leftWall1, 200, 5, black); // left wall1
 	drawWallS(leftWall2, 200, 5, black); //left wall2
 	drawWallS(rightWall1, 200, 5, black); //right wall1
@@ -596,61 +589,43 @@ void display(void)
 */
 	glutSwapBuffers();
 
-
-
-	//////////////////////////////////
-// Animation Control - compute the location for the next refresh
-	ballX += xSpeed;
-	ballY += ySpeed;
-	// Check if the ball exceeds the edges
-	if (ballX > ballXMax) {
-		ballX = ballXMax;
-		xSpeed = -xSpeed;
-	}
-	else if (ballX < ballXMin) {
-		ballX = ballXMin;
-		xSpeed = -xSpeed;
-	}
-	if (ballY > ballYMax) {
-		ballY = ballYMax;
-		ySpeed = -ySpeed;
-	}
-	else if (ballY < ballYMin) {
-		ballY = ballYMin;
-		ySpeed = -ySpeed;
-	}
 }
 
-/* Call back when the windows is re-sized */
-void reshape(GLsizei width, GLsizei height) {
-	// Compute aspect ratio of the new window
-	if (height == 0) height = 1;                // To prevent divide by 0
-	GLfloat aspect = (GLfloat)width / (GLfloat)height;
-
-	// Set the viewport to cover the new window
-	glViewport(0, 0, width, height);
-
-	// Set the aspect ratio of the clipping area to match the viewport
-	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
-	glLoadIdentity();             // Reset the projection matrix
-	if (width >= height) {
-		clipAreaXLeft = -1.0 * aspect;
-		clipAreaXRight = 1.0 * aspect;
-		clipAreaYBottom = -1.0;
-		clipAreaYTop = 1.0;
-	}
-	else {
-		clipAreaXLeft = -1.0;
-		clipAreaXRight = 1.0;
-		clipAreaYBottom = -1.0 / aspect;
-		clipAreaYTop = 1.0 / aspect;
-	}
-	gluOrtho2D(clipAreaXLeft, clipAreaXRight, clipAreaYBottom, clipAreaYTop);
-	ballXMin = clipAreaXLeft + ballRadius;
-	ballXMax = clipAreaXRight - ballRadius;
-	ballYMin = clipAreaYBottom + ballRadius;
-	ballYMax = clipAreaYTop - ballRadius;
-}
+//////////////////////////////////
+//// Animation Control - compute the location for the next refresh
+//	
+//}
+//
+///* Call back when the windows is re-sized */
+//void reshape(GLsizei width, GLsizei height) {
+//	// Compute aspect ratio of the new window
+//	if (height == 0) height = 1;                // To prevent divide by 0
+//	GLfloat aspect = (GLfloat)width / (GLfloat)height;
+//
+//	// Set the viewport to cover the new window
+//	glViewport(0, 0, width, height);
+//
+//	// Set the aspect ratio of the clipping area to match the viewport
+//	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+//	glLoadIdentity();             // Reset the projection matrix
+//	if (width >= height) {
+//		clipAreaXLeft = -1.0 * aspect;
+//		clipAreaXRight = 1.0 * aspect;
+//		clipAreaYBottom = -1.0;
+//		clipAreaYTop = 1.0;
+//	}
+//	else {
+//		clipAreaXLeft = -1.0;
+//		clipAreaXRight = 1.0;
+//		clipAreaYBottom = -1.0 / aspect;
+//		clipAreaYTop = 1.0 / aspect;
+//	}
+//	gluOrtho2D(clipAreaXLeft, clipAreaXRight, clipAreaYBottom, clipAreaYTop);
+//	ballXMin = clipAreaXLeft + ballRadius;
+//	ballXMax = clipAreaXRight - ballRadius;
+//	ballYMin = clipAreaYBottom + ballRadius;
+//	ballYMax = clipAreaYTop - ballRadius;
+//}
 /////////////////////////////////
 
 
@@ -718,7 +693,7 @@ int main(int argc, char* argv[])
 	glutInitWindowSize(1300, 500);
 	window = glutCreateWindow("Football Soccer");
 	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);     // Register callback handler for window re-shape
+	//glutReshapeFunc(reshape);     // Register callback handler for window re-shape
 
 	//glutIdleFunc(idle);	
 	/*glutMouseFunc(mousePress);
