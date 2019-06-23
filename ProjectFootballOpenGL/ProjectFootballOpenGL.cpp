@@ -121,10 +121,8 @@ void drawCircle(Point& p, float radius, Color& c) {
 	if ((p.y < 1 || p.x > 0 || p.y > 440) && ballCounter > 0)
 	{
 		ballCounter--;
-		p.x = 0;
-		p.y = 440;
-		p.x = 295;
-		p.y  = 300;
+		p.x = 150;
+		p.y = 250;		
 		vx = -vx;
 		vy = -vy;
 	}
@@ -393,7 +391,7 @@ void display(void)
 	drawRectangle(fieldMidLine, 1000, 1, grey);
 
 	//ball
-	drawCircle(currentPosition, 8, grey); // ball
+	drawCircle(currentPosition, 8, black); // ball
 
 	// walls
 	drawWallS(upperWall, 20, 400, black); // top wall
@@ -466,7 +464,7 @@ int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(1300, 500);
+	glutInitWindowSize(700, 500);
 	window = glutCreateWindow("Football Soccer");
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
