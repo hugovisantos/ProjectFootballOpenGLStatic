@@ -21,10 +21,6 @@ const int BALL_SIZE = 7;
 // physics variables
 float g = .00002;
 float f = .00001;
-float initVelX = 0;
-float currVelX = 0;
-float initVelY = 0;
-float currVelY = 0;
 float vx = 0;
 float vy = 0;
 
@@ -64,15 +60,14 @@ struct Vector {
 // Points
 Point origin;
 
-//Point leftFlipper;
-//Point rightFlipper;
-
 Point upperWall;
 Point bottomWall;
 Point leftWall1;
 Point leftWall2;
 Point rightWall1;
 Point rightWall2;
+
+Point fieldMidLine;
 
 Point bumper1;
 Point bumper2;
@@ -99,11 +94,6 @@ Point bumper22;
 Point bumper23;
 Point bumper24;
 
-//Point target1;
-//Point target2;
-//Point hole1;
-//Point hole2;
-
 Point leftLFlipperState;
 Point leftRFlipperState;
 Point rightLFlipperState;
@@ -114,25 +104,9 @@ Point currentPosition;
 Point initialPosition;
 Point lastPosition;
 
-// Vector
-Vector current;
-Vector initial;
-
 // flipper variables
 float angle = 0.0;
 const float ANGLE_CHANGE = 45;
-
-// draw text
-//void output(int x, int y, float r, float g, float b, const char* string)
-//{
-//	glColor3f(r, g, b);
-//	glRasterPos2f(x, y);
-//	int len, i;
-//	len = (int)strlen(string);
-//	for (i = 0; i < len; i++) {
-//		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[i]);
-//	}
-//}
 
 // draw the Pinball
 void drawCircle(Point& p, float radius, Color& c) {
@@ -142,22 +116,21 @@ void drawCircle(Point& p, float radius, Color& c) {
 	for (float angle = 0; angle < 2 * PI; angle += delta_theta)
 		glVertex3f(radius * cos(angle) + p.x, radius * sin(angle) + p.y, 0);
 	glEnd();
-
-	//cout << "y coordinate: " << p.y << endl;
-	//cout << "x coordinate: " << p.x << endl;
-
+		
 	lastPosition = p;
-	if ((p.y < 1 || p.x > 300 || p.y > 440) && ballCounter > 0)
+	if ((p.y < 1 || p.x > 0 || p.y > 440) && ballCounter > 0)
 	{
 		ballCounter--;
-		p.x = 1300;
-		p.y = 500;
+		p.x = 0;
+		p.y = 440;
+		p.x = 295;
+		p.y  = 300;
 		vx = -vx;
 		vy = -vy;
 	}
-	if (p.x > 1300)
+	if (p.x > 0)
 	{
-		if (p.y >= 500)
+		if (p.y >= 440)
 		{
 			vx = vy;
 			p.x -= vx;
@@ -212,47 +185,6 @@ void drawBumper(Point& p, float radius, Color& c) {
 	glEnd();
 }
 
-// draws a pitfall obstacle
-//void drawHole(Point& p, float radius, Color& c) {
-//	// Collision code
-//	float d = sqrt((pow(p.x - currentPosition.x, 2)) + (pow(p.y - currentPosition.y, 2)));
-//	if (d <= 22 && ballCounter > 0)
-//	{
-//		// do this when there is a collision 
-//		ballCounter--;
-//		cout << "Ball Counter: " << ballCounter << endl;
-//		currentPosition.x = 280;
-//		currentPosition.y = 77;
-//		vx = -vx;
-//		vy = -vy;
-//	}
-//
-//	// draw circle
-//	float delta_theta = 0.01;
-//	glColor3f(c.r, c.g, c.b);
-//	glBegin(GL_POLYGON);
-//	for (float angle = 0; angle < 2 * PI; angle += delta_theta)
-//		glVertex3f(radius * cos(angle) + p.x, radius * sin(angle) + p.y, 0);
-//	glEnd();
-//}
-
-// draws a target obstacle
-//void drawTarget(Point& p, float height, float width, Color& c) {
-//	if (p.y < currentPosition.y + 7 && (currentPosition.x > p.x && currentPosition.x < p.x + 20))
-//	{
-//		//score += 1000;
-//		vy = -vy;
-//	}
-//	glColor3f(c.r, c.g, c.b);
-//	glBegin(GL_POLYGON);
-//	glVertex3f(p.x, p.y, 0);
-//	glVertex3f(p.x + width, p.y, 0);
-//	glVertex3f(p.x + width, p.y + height, 0);
-//	glVertex3f(p.x, p.y + height, 0);
-//	glVertex3f(p.x, p.y, 0);
-//	glEnd();
-//}
-
 // draws a rectangle
 void drawRectangle(Point& p, float height, float width, Color& c) {
 	glColor3f(c.r, c.g, c.b);
@@ -290,73 +222,6 @@ void drawWallS(Point& p, float height, float width, Color& c) {
 	glEnd();
 }
 
-// Inner Side Walls
-//void drawWallSM(Point& p, float height, float width, Color& c) {
-//	// handle collision
-//	if ((p.x + 10 < currentPosition.x - 7 || p.x > currentPosition.x + 7) && currentPosition.y < 110)
-//	{
-//		// do this when there is collision with side of wall
-//		vx = -vx;
-//	}
-//
-//	// draw rectangle
-//	glColor3f(c.r, c.g, c.b);
-//	glBegin(GL_POLYGON);
-//	glVertex3f(p.x, p.y, 0);
-//	glVertex3f(p.x + width, p.y, 0);
-//	glVertex3f(p.x + width, p.y + height, 0);
-//	glVertex3f(p.x, p.y + height, 0);
-//	glVertex3f(p.x, p.y, 0);
-//	glEnd();
-//}
-
-// Insert Side Wall
-//void drawWallIS(Point& p, float height, float width, Color& c) {
-//	// handle collision
-//	if (p.x < currentPosition.x + 7 && p.y + 400 > currentPosition.y)
-//	{
-//		// collision with side of wall
-//		vx = -vx;
-//	}
-//
-//	// draw rectangle
-//	glColor3f(c.r, c.g, c.b);
-//	glBegin(GL_POLYGON);
-//	glVertex3f(p.x, p.y, 0);
-//	glVertex3f(p.x + width, p.y, 0);
-//	glVertex3f(p.x + width, p.y + height, 0);
-//	glVertex3f(p.x, p.y + height, 0);
-//	glVertex3f(p.x, p.y, 0);
-//	glEnd();
-//}
-
-// Top Wall
-//void drawWallTB(Point& p, float height, float width, Color& c) {
-//	// handle collision
-//	if (p.y < currentPosition.y + 7)
-//	{
-//		vy = -vy;
-//	}
-//
-//	// draw rectangle
-//	glColor3f(c.r, c.g, c.b);
-//	glBegin(GL_POLYGON);
-//	glVertex3f(p.x, p.y, 0);
-//	glVertex3f(p.x + width, p.y, 0);
-//	glVertex3f(p.x + width, p.y + height, 0);
-//	glVertex3f(p.x, p.y + height, 0);
-//	glVertex3f(p.x, p.y, 0);
-//	glEnd();
-//}
-
-// Flipper
-//void drawFlipper(Point& p, float segmentWidth, float segmentHeight, Color& c) {
-//	Point current;
-//	current.x = p.x + segmentHeight / 2;
-//	current.y = p.y;
-//	drawRectangle(current, segmentHeight, segmentWidth - segmentHeight / 2, c);
-//}
-
 // display function
 void display(void)
 {
@@ -367,11 +232,7 @@ void display(void)
 
 	// POINT LOCATIONS
 	origin.x = 0; origin.y = 0;
-
-	// flippers
-	/*leftFlipper.x = 0;	leftFlipper.y = 0;
-	rightFlipper.x = 0; rightFlipper.y = 0;*/
-
+		
 	// walls
 	upperWall.x = 0;		upperWall.y = 460;
 	bottomWall.x = 0;		bottomWall.y = 0;
@@ -379,6 +240,9 @@ void display(void)
 	leftWall2.x = 0;		leftWall2.y = 300;
 	rightWall1.x = 295;		rightWall1.y = 0;
 	rightWall2.x = 295;		rightWall2.y = 300;
+
+	// lines 
+	fieldMidLine.x = 150; fieldMidLine.y = 0;
 
 	// obstacles
 	bumper1.x = 30;		bumper1.y = 100;
@@ -403,12 +267,6 @@ void display(void)
 	bumper20.x = 270;	bumper20.y = 200;
 	bumper21.x = 270;	bumper21.y = 300;
 	bumper22.x = 270;	bumper22.y = 400;
-
-
-	/*target1.x = 110; target1.y = 435;
-	target2.x = 145; target2.y = 435;
-	hole1.x = 25; hole1.y = 10;
-	hole2.x = 245; hole2.y = 10;*/
 
 	// COLORS
 	// grey
@@ -463,18 +321,12 @@ void display(void)
 		ld = abs((14 * currentPosition.x) + (31 * currentPosition.y) - 2715) / 34.0147027;
 	}
 
-	//drawFlipper(leftFlipper, 75, 15, blue); // draw the flipper
 	glPopMatrix();
 
 	if (ld <= 15 && (currentPosition.x >= 50 && currentPosition.x <= 112))
 	{
 		vy = -vy;
 	}
-
-	// Right Flipper
-	/*glPushMatrix();
-	glTranslatef(220, 50, 0);
-	glRotatef(25, 0, 0, 1);*/
 
 	if (GetAsyncKeyState(0xBF) & 0x8000 && angle < 45.0)
 	{
@@ -537,6 +389,8 @@ void display(void)
 	drawBumper(bumper24, 6, gold); // bumper24
 
 
+	//Line mid field 
+	drawRectangle(fieldMidLine, 1000, 1, grey);
 
 	//ball
 	drawCircle(currentPosition, 8, grey); // ball
@@ -549,80 +403,9 @@ void display(void)
 	drawWallS(rightWall1, 200, 5, black); //right wall1
 	drawWallS(rightWall2, 200, 5, black); //right wall2
 
-	//drawTarget(target1, 5, 20, green); // target1
-	//drawTarget(target2, 5, 20, green); // target2
-	//drawHole(hole1, 10, black); // hole1
-	//drawHole(hole2, 10, black); // hole2
-
-	//// plunger mechanism
-	//glBegin(GL_POLYGON);
-	//glColor3f(1.0, 1.0, 1.0);
-	//glVertex2f(270, 60);
-	//glVertex2f(290, 60);
-	//if (dragging)
-	//{
-	//	launch = 0;
-	//	acc += .5;
-	//	glVertex2f(290, 500 - mouseY);
-	//	glVertex2f(270, 500 - mouseY);
-	//}
-	//else
-	//{
-	//	launch = acc;
-	//	glVertex2f(290, 40);
-	//	glVertex2f(270, 40);
-	//}
-	//glEnd();
-
-
-	/*stringstream ss;
-	ss << "Score: " << score;
-	output(10, 460, 1.0, 1.0, 1.0, ss.str().c_str());
-
-	stringstream bs;
-	bs << "Balls: " << ballCounter;
-	output(200, 460, 1.0, 1.0, 1.0, bs.str().c_str());
-*/
 	glutSwapBuffers();
 
 }
-
-//////////////////////////////////
-//// Animation Control - compute the location for the next refresh
-//	
-//}
-//
-///* Call back when the windows is re-sized */
-//void reshape(GLsizei width, GLsizei height) {
-//	// Compute aspect ratio of the new window
-//	if (height == 0) height = 1;                // To prevent divide by 0
-//	GLfloat aspect = (GLfloat)width / (GLfloat)height;
-//
-//	// Set the viewport to cover the new window
-//	glViewport(0, 0, width, height);
-//
-//	// Set the aspect ratio of the clipping area to match the viewport
-//	glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
-//	glLoadIdentity();             // Reset the projection matrix
-//	if (width >= height) {
-//		clipAreaXLeft = -1.0 * aspect;
-//		clipAreaXRight = 1.0 * aspect;
-//		clipAreaYBottom = -1.0;
-//		clipAreaYTop = 1.0;
-//	}
-//	else {
-//		clipAreaXLeft = -1.0;
-//		clipAreaXRight = 1.0;
-//		clipAreaYBottom = -1.0 / aspect;
-//		clipAreaYTop = 1.0 / aspect;
-//	}
-//	gluOrtho2D(clipAreaXLeft, clipAreaXRight, clipAreaYBottom, clipAreaYTop);
-//	ballXMin = clipAreaXLeft + ballRadius;
-//	ballXMax = clipAreaXRight - ballRadius;
-//	ballYMin = clipAreaYBottom + ballRadius;
-//	ballYMax = clipAreaYTop - ballRadius;
-//}
-/////////////////////////////////
 
 
 
@@ -645,10 +428,7 @@ void init()
 	glLoadIdentity();
 	glOrtho(0, 300, 0, 500, 0, 1);
 	initialPosition.x = 150;	initialPosition.y = 250;
-	currentPosition = initialPosition;
-
-
-
+	currentPosition = initialPosition;	   
 }
 
 // checks mouse button press
@@ -689,8 +469,6 @@ int main(int argc, char* argv[])
 	glutInitWindowSize(1300, 500);
 	window = glutCreateWindow("Football Soccer");
 	glutDisplayFunc(display);
-	//glutReshapeFunc(reshape);     // Register callback handler for window re-shape
-
 	glutIdleFunc(idle);
 	glutMouseFunc(mousePress);
 	glutMotionFunc(mouseDrag);
